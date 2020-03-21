@@ -1,0 +1,142 @@
+name: "plate-detection"
+
+layer {
+    top: "image"
+    name: "image"
+    type: "Input"
+    input_param {
+        shape {
+            dim: 7
+            dim: 3
+            dim: 28
+            dim: 28
+        }
+    }
+}
+
+layer {
+    bottom: "image"
+    top: "conv1"
+    name: "conv1"
+	type: "Convolution"
+	convolution_param {
+		num_output: 32
+		kernel_size: 5
+		pad: 2
+		stride: 1
+		bias_term: true
+	}
+}
+
+layer {
+    bottom: "conv1"
+    top: "conv1"
+    name: "conv1_relu"
+    type: "ReLU"
+}
+
+layer {
+    bottom: "conv1"
+    top: "maxpool1"
+    name: "maxpool1"
+    type: "Pooling"
+    pooling_param {
+        pool: MAX
+        kernel_size: 2
+        stride: 2
+    }
+}
+
+layer {
+    bottom: "maxpool1"
+    top: "conv2"
+    name: "conv2"
+    type: "Convolution"
+    convolution_param {
+		num_output: 64
+		kernel_size: 5
+		pad: 2
+		stride: 1
+		bias_term: true
+    }
+}
+
+layer {
+    bottom: "conv2"
+    top: "conv2"
+    name: "conv2_relu"
+    type: "ReLU"
+}
+
+layer {
+    bottom: "conv2"
+    top: "maxpool2"
+    name: "maxpool2"
+    type: "Pooling"
+    pooling_param {
+        pool: MAX
+        kernel_size: 2
+        stride: 2
+    }
+}
+
+layer {
+    bottom: "maxpool2"
+    top: "conv3"
+    name: "conv3"
+    type: "Convolution"
+    convolution_param {
+		num_output: 128
+		kernel_size: 3
+		pad: 1
+		stride: 1
+		bias_term: true
+    }
+}
+
+layer {
+    bottom: "conv3"
+    top: "conv3"
+    name: "conv3_relu"
+    type: "ReLU"
+}
+
+layer {
+    bottom: "conv3"
+    top: "conv3_reshape"
+    name: "conv3_reshape"
+    type: "Reshape"
+    reshape_param {
+        shape {
+            dim: 0
+            dim: -1
+        }
+    }
+}
+
+layer {
+    bottom: "conv3_reshape"
+    top: "fc1"
+    name: "fc1"
+    type: "InnerProduct"
+    inner_product_param {
+        num_output: 256
+    }
+}
+
+layer {
+    bottom: "fc1"
+    top: "fc1"
+    name: "fc1_relu"
+    type: "ReLU"
+}
+
+layer {
+    bottom: "fc1"
+    top: "fc2"
+    name: "fc2"
+    type: "InnerProduct"
+    inner_product_param {
+        num_output: 71
+    }
+}
